@@ -18,7 +18,6 @@ namespace printer_aplication_desktop
 {
     public class Printer
     {
-        private int width = 42;
         private dynamic printer;
         private string type;
         private int times;

@@ -1,6 +1,6 @@
 ﻿namespace printer_aplication_desktop.utils
 {
-    public interface IPrinter
+    public interface IPrinterEscPos
     {
         void Print(byte[] dataPrintElement);
 
@@ -27,6 +27,8 @@
         byte[] PrintQRCode(string dataQR);
 
         byte[] PrinterCutWidth(int quantity);
+
+        byte[] UFT8Encoding(string data);
 
     }
 }

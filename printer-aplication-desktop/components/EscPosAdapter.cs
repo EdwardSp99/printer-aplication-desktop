@@ -1,23 +1,78 @@
 ﻿using ESCPOS_NET;
 using ESCPOS_NET.Emitters;
 using ESCPOS_NET.Utilities;
+using printer_aplication_desktop.utils;
+using System;
 using System.IO;
+using System.Text;
 
-namespace printer_aplication_desktop.utils
+namespace printer_aplication_desktop.components
 {
-    public class SerialPrinterAdapter : IPrinter
+    public class EscPosAdapter : IPrinterEscPos
     {
-        private SerialPrinter printer;
+        private ListTypeConexion typeConexion;
         private EPSON elementDataPrinter;
+        private object printer;
+        private object hostname;
+        private object port;
 
-        public SerialPrinterAdapter(string portName, int baudRate)
+
+        public EscPosAdapter(object hostname, object port, ListTypeConexion typeConexion)
         {
-            printer = new SerialPrinter(portName, baudRate);
+            elementDataPrinter = new EPSON();
+            this.hostname = hostname;
+            this.port = port;
+            this.typeConexion = typeConexion;
+            Conexion();
+        }
+
+        private void Conexion() 
+        {
+            switch (typeConexion)
+            {
+                case ListTypeConexion.ImmediateNetworkPrinter:
+                    printer = new ImmediateNetworkPrinter(new ImmediateNetworkPrinterSettings()
+                    {
+                        ConnectionString = $"{hostname}:{port}",
+                        PrinterName = "PrinterConnector"
+                    });
+                    break;
+                case ListTypeConexion.SerialPrinter:
+                    int Bound = Convert.ToInt32(port.ToString());
+                    printer = new SerialPrinter(hostname.ToString(), Bound);
+                    break;
+                case ListTypeConexion.FilePrinter:
+                    printer = new FilePrinter(hostname.ToString());
+                    break;
+                case ListTypeConexion.SambaPrinter:
+                    printer = new SambaPrinter(hostname.ToString(), port.ToString());
+                    break;
+                default:
+                    throw new ArgumentException("Tipo de impresora no válido.");
+            }
         }
 
         public void Print(byte[] dataPrintElement)
         {
-            printer.Write(CombinePrinterParameter(dataPrintElement));
+            if (printer is ImmediateNetworkPrinter printerNetWork) 
+            {
+                printerNetWork.WriteAsync(CombinePrinterParameter(dataPrintElement));
+            }
+
+            if (printer is SerialPrinter printerSerial)
+            {
+                printerSerial.Write(CombinePrinterParameter(dataPrintElement));
+            }
+
+            if (printer is FilePrinter printerFile)
+            {
+                printerFile.Write(CombinePrinterParameter(dataPrintElement));
+            }
+
+            if (printer is SambaPrinter printerSamba)
+            {
+                printerSamba.Write(CombinePrinterParameter(dataPrintElement));
+            }
         }
 
         public byte[] CombinePrinterParameter(params byte[][] dataPrinter)
@@ -110,6 +165,13 @@ namespace printer_aplication_desktop.utils
             byte[] cutPrinter = CombinePrinterParameter(elementDataPrinter.FullCutAfterFeed(quantity));
 
             return cutPrinter;
+        }
+
+        public byte[] UFT8Encoding(string data) 
+        {
+            byte[] utf8Bytes = Encoding.UTF8.GetBytes(data);
+
+            return utf8Bytes;
         }
     }
 }

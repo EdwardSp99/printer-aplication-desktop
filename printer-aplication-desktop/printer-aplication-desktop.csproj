@@ -199,6 +199,9 @@
     <Reference Include="WindowsBase" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="components\EscPosAdapter.cs" />
+    <Compile Include="components\EscPosClass.cs" />
+    <Compile Include="components\ListTypeConexion.cs" />
     <Compile Include="components\PrinterClass.cs" />
     <Compile Include="Form1.cs">
       <SubType>Form</SubType>
@@ -208,7 +211,7 @@
     </Compile>
     <Compile Include="components\FilePrinterAdapter.cs" />
     <Compile Include="components\NetworkPrinterAdapter.cs" />
-    <Compile Include="components\IPrinter.cs" />
+    <Compile Include="components\IPrinterEscPos.cs" />
     <Compile Include="utils\Printer.cs" />
     <Compile Include="utils\PrinterFast.cs" />
     <Compile Include="Program.cs" />

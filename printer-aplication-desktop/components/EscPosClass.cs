@@ -8,16 +8,16 @@ using System.Windows;
 
 namespace printer_aplication_desktop.components
 {
-    public class PrinterClass
+    public class EscPosClass
     {
         private int width = 42;
         private dynamic printer;
         private string type;
         private int times;
         private dynamic data;
-        private IPrinter connectorPrinter;
+        private IPrinterEscPos connectorPrinter;
 
-        public PrinterClass(dynamic data)
+        public EscPosClass(dynamic data) 
         {
             this.printer = data.printer;
             this.type = data.type;
@@ -27,30 +27,33 @@ namespace printer_aplication_desktop.components
 
         public void PrinterDocument()
         {
-            Connect();
-            connectorPrinter.Print(PrintLayout());
+            ConnectTypePrinter();
+            for (int i=0 ; i<times ; i++) 
+            {
+                connectorPrinter.Print(PrintLayout());
+            }
         }
 
-        private void Connect()
+        private void ConnectTypePrinter()
         {
             try
             {
                 switch (printer.type.ToString())
                 {
                     case "ethernet":
-                        connectorPrinter = new NetworkPrinterAdapter(printer.name_system, printer.port);
+                        connectorPrinter = new EscPosAdapter(printer.name_system, printer.port, ListTypeConexion.ImmediateNetworkPrinter);
                         break;
                     case "linux-usb":
-                        connectorPrinter = new FilePrinterAdapter(printer.name_system);
+                        connectorPrinter = new EscPosAdapter(printer.name_system, printer.port, ListTypeConexion.FilePrinter);
                         break;
                     case "serial":
-                        connectorPrinter = new SerialPrinterAdapter(printer.name_system, printer.port);
+                        connectorPrinter = new EscPosAdapter(printer.name_system, printer.port, ListTypeConexion.SerialPrinter);
                         break;
-                    case "windows-usb":
-                        connectorPrinter = new SerialPrinterAdapter(printer.name_system, printer.port);
+                    case "samba":
+                        connectorPrinter = new EscPosAdapter(printer.name_system, printer.port, ListTypeConexion.SambaPrinter);
                         break;
                     default:
-                        throw new Exception("Tipo de ticketera no soportado");
+                        throw new Exception("Tipo de impresora no soportado");
                 }
             }
             catch (Exception ex)
@@ -136,14 +139,14 @@ namespace printer_aplication_desktop.components
 
         private byte[] Header()
         {
-            byte[] result = connectorPrinter.CombinePrinterParameter(connectorPrinter.CenterTextPosition(), 
+            byte[] result = connectorPrinter.CombinePrinterParameter(connectorPrinter.CenterTextPosition(),
                 connectorPrinter.BoldTextFont());
 
             if (data.business.comercialDescription != null)
             {
                 if (data.business.comercialDescription.type == "text")
                 {
-                    result=connectorPrinter.CombinePrinterParameter(
+                    result = connectorPrinter.CombinePrinterParameter(
                         result,
                         connectorPrinter.PrintDataLine(data.business.comercialDescription.value.ToString().ToUpper()));
                 }
@@ -494,10 +497,10 @@ namespace printer_aplication_desktop.components
         private byte[] ProductionArea()
         {
             byte[] result = connectorPrinter.CombinePrinterParameter(
-                connectorPrinter.CenterTextPosition(), 
+                connectorPrinter.CenterTextPosition(),
                 connectorPrinter.NoneTextFont());
 
-            if (data.productionArea ==null) 
+            if (data.productionArea == null)
             {
                 result = connectorPrinter.CombinePrinterParameter(connectorPrinter.PrintDataLine(""));
                 return result;

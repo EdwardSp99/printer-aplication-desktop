@@ -314,37 +314,9 @@ namespace printer_aplication_desktop
                 }
             }";*/
 
-            /*if (!string.IsNullOrEmpty(pathFileImage))
-            {
-                string fileDestiny = Path.Combine(Directory.GetCurrentDirectory(), "img");
-
-                createFolderImage();
-
-                string nameFileDestiny = Path.Combine(fileDestiny, "logo" + Path.GetExtension(pathFileImage));
-
-                try
-                {
-                    if (File.Exists(nameFileDestiny)) 
-                    {
-                        File.Delete(nameFileDestiny);
-                    }
-
-                    File.Copy(pathFileImage, nameFileDestiny);
-                    MessageBox.Show("Imagen guardada correctamente.", "Éxito", MessageBoxButtons.OK, MessageBoxIcon.Information);
-                }
-                catch (Exception ex)
-                {
-                    MessageBox.Show($"Error al guardar la imagen: {ex.Message}", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                }
-            }*/
-
             dynamic myData = JsonConvert.DeserializeObject<dynamic>(json);
 
-            /*Printer ethernetPrinter = new Printer(myData);
-
-            ethernetPrinter.PrinterExample();*/
-
-            PrinterClass connectorPrinterFinal = new PrinterClass(myData);
+            EscPosClass connectorPrinterFinal = new EscPosClass(myData);
 
             connectorPrinterFinal.PrinterDocument();
         }

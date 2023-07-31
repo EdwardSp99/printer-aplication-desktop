@@ -28,6 +28,7 @@ namespace printer_aplication_desktop.components
         public void PrinterDocument()
         {
             ConnectTypePrinter();
+
             for (int i=0 ; i<times ; i++) 
             {
                 connectorPrinter.Print(PrintLayout());
@@ -176,6 +177,11 @@ namespace printer_aplication_desktop.components
                     connectorPrinter.PrintDataLine(data.business.description.ToString())
                     );
             }
+
+            result = connectorPrinter.CombinePrinterParameter(
+                result,
+                connectorPrinter.PrintDataLine(""));
+
             return result;
         }
 
@@ -197,6 +203,11 @@ namespace printer_aplication_desktop.components
                     result,
                     connectorPrinter.PrintDataLine(additional));
             }
+
+            result = connectorPrinter.CombinePrinterParameter(
+               result,
+               connectorPrinter.PrintDataLine(""));
+
             return result;
         }
 
@@ -239,6 +250,11 @@ namespace printer_aplication_desktop.components
                         connectorPrinter.PrintDataLine(data.document.description.ToString()));
                     break;
             }
+
+            result = connectorPrinter.CombinePrinterParameter(
+               result,
+               connectorPrinter.PrintDataLine(""));
+
             return result;
         }
 

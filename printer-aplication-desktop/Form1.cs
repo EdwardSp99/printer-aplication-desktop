@@ -129,7 +129,7 @@ namespace printer_aplication_desktop
                 }
             }";*/
 
-            string json = @"{
+            /*string json = @"{
                 ""type"": ""invoice"",
                 ""times"" : 1,
                 ""printer"": {
@@ -196,11 +196,11 @@ namespace printer_aplication_desktop
     	            ],
 	                ""stringQR"": ""20450523381|01|F001|00000006|0|9.00|30/09/2019|6|sdfsdfsdf|""
                 }
-            }";
+            }";*/
 
-            /*string json = @"{
+            string json = @"{
                 ""type"": ""extra"",
-                ""times"": 1,
+                ""times"": 2,
                 ""printer"": {
                     ""type"": ""ethernet"",
                     ""name_system"": ""192.168.1.241"",
@@ -236,7 +236,7 @@ namespace printer_aplication_desktop
                         }
                     ]
                 }
-            }";*/
+            }";
 
             /*string json = @"{
                 ""type"": ""precount"",
@@ -337,7 +337,6 @@ namespace printer_aplication_desktop
         {
            string fileDestinyOriginal = Path.Combine(Directory.GetCurrentDirectory(), "img");
 
-            // Crear la carpeta "img" si no existe.
             if (!Directory.Exists(fileDestinyOriginal))
             {
                 Directory.CreateDirectory(fileDestinyOriginal);

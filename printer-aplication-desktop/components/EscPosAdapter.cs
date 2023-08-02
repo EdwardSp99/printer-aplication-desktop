@@ -35,10 +35,26 @@ namespace printer_aplication_desktop.components
             characterMap = new Dictionary<char, char>
             {
                 { 'á', 'a' }, { 'Á', 'A' },
+                { 'à', 'a' }, { 'À', 'A' },
+                { 'â', 'a' }, { 'Â', 'A' },
+                { 'ã', 'a' }, { 'Ã', 'A' },
+                { 'ä', 'a' }, { 'Ä', 'A' },
                 { 'é', 'e' }, { 'É', 'E' },
+                { 'è', 'e' }, { 'È', 'E' },
+                { 'ê', 'e' }, { 'Ê', 'E' },
+                { 'ë', 'e' }, { 'Ë', 'E' },
                 { 'í', 'i' }, { 'Í', 'I' },
+                { 'ì', 'i' }, { 'Ì', 'I' },                
+                { 'î', 'i' }, { 'Î', 'I' },
+                { 'ï', 'i' }, { 'Ï', 'I' },
                 { 'ó', 'o' }, { 'Ó', 'O' },
+                { 'ò', 'o' }, { 'Ò', 'O' },
+                { 'ô', 'o' }, { 'Ô', 'O' },
+                { 'õ', 'o' }, { 'Õ', 'O' },
+                { 'ö', 'o' }, { 'Ö', 'O' },
                 { 'ú', 'u' }, { 'Ú', 'U' },
+                { 'ù', 'u' }, { 'Ù', 'U' },
+                { 'û', 'u' }, { 'Û', 'U' },
                 { 'ü', 'u' }, { 'Ü', 'U' },
                 { 'ñ', 'n' }, { 'Ñ', 'N' },
             };
@@ -46,7 +62,7 @@ namespace printer_aplication_desktop.components
 
         private string ReplaceSpecialCharactersWithLetters(string input)
         {
-            string replacedString = Regex.Replace(input, "[áéíóúÁÉÍÓÚüÜñÑ]", m => characterMap[m.Value[0]].ToString(), RegexOptions.IgnoreCase);
+            string replacedString = Regex.Replace(input, "[áàâãäéèêëíìîïóòôõöúùûüñÁÀÂÃÄÉÈÊËÍÌÎÏÓÒÔÕÖÚÙÛÜÑ]", m => characterMap[m.Value[0]].ToString(), RegexOptions.IgnoreCase);
 
             return replacedString;
         }

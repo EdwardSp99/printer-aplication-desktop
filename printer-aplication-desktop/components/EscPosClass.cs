@@ -149,7 +149,9 @@ namespace printer_aplication_desktop.components
                 {
                     result = connectorPrinter.CombinePrinterParameter(
                         result,
-                        connectorPrinter.PrintDataLine(data.business.comercialDescription.value.ToString().ToUpper()));
+                        connectorPrinter.DoubleHeightWeightText(),
+                        connectorPrinter.PrintDataLine(data.business.comercialDescription.value.ToString().ToUpper()),
+                        connectorPrinter.NoneTextFont());
                 }
                 else if (data.business.comercialDescription.type == "img")
                 {
@@ -177,10 +179,6 @@ namespace printer_aplication_desktop.components
                     connectorPrinter.PrintDataLine(data.business.description.ToString())
                     );
             }
-
-            result = connectorPrinter.CombinePrinterParameter(
-                result,
-                connectorPrinter.PrintDataLine(""));
 
             return result;
         }
@@ -214,8 +212,8 @@ namespace printer_aplication_desktop.components
         private byte[] DocumentLegal()
         {
             byte[] result = connectorPrinter.CombinePrinterParameter(
-                connectorPrinter.BoldTextFont(),
-                connectorPrinter.NoneTextFont());
+                connectorPrinter.NoneTextFont(),
+                connectorPrinter.BoldTextFont());
 
             switch (type)
             {
@@ -225,7 +223,7 @@ namespace printer_aplication_desktop.components
 
                     if (data.document != null)
                     {
-                        string text = data.document.description.ToString() + " " + data.document.indentifier.ToString();
+                        string text = data.document.description.ToString() + " " + data.document.identifier.ToString();
 
                         result = connectorPrinter.CombinePrinterParameter(
                             result,
@@ -277,7 +275,7 @@ namespace printer_aplication_desktop.components
             {
                 result = connectorPrinter.CombinePrinterParameter(
                     result,
-                    connectorPrinter.PrintDataLine("----"));
+                    connectorPrinter.PrintDataLine(new string('-', width)));
             }
 
             return result;
@@ -304,6 +302,7 @@ namespace printer_aplication_desktop.components
         private byte[] Items()
         {
             byte[] result = connectorPrinter.CombinePrinterParameter(
+                connectorPrinter.PrintDataLine(""),
                 connectorPrinter.LeftTextPosition());
 
             if (data.items != null)
@@ -367,11 +366,13 @@ namespace printer_aplication_desktop.components
                                 totalPrice = item.totalPrice.ToString("F2");
                             }
 
+                            string element = "  " + quantity.PadRight(3) + description;
+
                             result = connectorPrinter.CombinePrinterParameter(
                                 result,
                                 connectorPrinter.NoneTextFont(),
                                 connectorPrinter.LeftTextPosition(),
-                                connectorPrinter.PrintDataLine(" " + quantity.PadRight(4) + description.PadRight(40) + totalPrice.PadLeft(10)));
+                                connectorPrinter.PrintDataLine(connectorPrinter.PadRightText(element, (width-totalPrice.Length), ' ') + totalPrice));
                         }
 
                         if (item.commentary != null)
@@ -463,7 +464,8 @@ namespace printer_aplication_desktop.components
         private byte[] FinalMessage()
         {
             byte[] result = connectorPrinter.CombinePrinterParameter(
-                connectorPrinter.NoneTextFont());
+                connectorPrinter.NoneTextFont(),
+                connectorPrinter.CenterTextPosition());
 
             if (data.finalMessage == null)
             {
@@ -473,8 +475,6 @@ namespace printer_aplication_desktop.components
 
             if (data.finalMessage is JArray)
             {
-                result = connectorPrinter.CombinePrinterParameter(connectorPrinter.LeftTextPosition());
-
                 foreach (string message in data.finalMessage)
                 {
                     result = connectorPrinter.CombinePrinterParameter(
@@ -486,7 +486,6 @@ namespace printer_aplication_desktop.components
             {
                 result = connectorPrinter.CombinePrinterParameter(
                     result,
-                    connectorPrinter.CenterTextPosition(),
                     connectorPrinter.PrintDataLine(data.finalMessage.ToString()));
             }
 
@@ -568,7 +567,7 @@ namespace printer_aplication_desktop.components
             result = connectorPrinter.CombinePrinterParameter(
                 result,
                 connectorPrinter.TextInvertedFont(true),
-                connectorPrinter.PrintDataLine(new string(' ', 15) + value + new string(' ', 15)),
+                connectorPrinter.PrintDataLine(connectorPrinter.PadBoth(value, width, ' ')),
                 connectorPrinter.TextInvertedFont(false));
             return result;
         }

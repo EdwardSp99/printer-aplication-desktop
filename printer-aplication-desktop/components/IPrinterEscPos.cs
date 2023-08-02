@@ -4,9 +4,13 @@
     {
         void Print(byte[] dataPrintElement);
 
+        byte[] DoubleHeightWeightText();
+
         byte[] CombinePrinterParameter(params byte[][] dataPrinter);
 
         byte[] PrintDataLine(string textPrinter);
+
+        byte[] PrintData(string textPrinter);
 
         byte[] CenterTextPosition();
 
@@ -28,7 +32,11 @@
 
         byte[] PrinterCutWidth(int quantity);
 
-        byte[] UFT8Encoding(string data);
+        string PadBoth(string text, int width, char PaddingChar);
+
+        string PadRightText(string text, int width, char characterPad);
+
+        string UFTCharacter(string str);
 
     }
 }

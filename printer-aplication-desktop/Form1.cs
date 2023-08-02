@@ -129,7 +129,7 @@ namespace printer_aplication_desktop
                 }
             }";*/
 
-            /*string json = @"{
+            string json = @"{
                 ""type"": ""invoice"",
                 ""times"" : 1,
                 ""printer"": {
@@ -140,7 +140,7 @@ namespace printer_aplication_desktop
                 ""data"" : {
                         ""document"": {
                             ""description"": ""Boleta de Venta\r ELECTRONICA"",
-                            ""indentifier"": ""B001 - 00000071""  
+                            ""identifier"": ""B001 - 00000071""  
                         },
 	                ""business"": {
 	                    ""comercialDescription"": {
@@ -196,11 +196,11 @@ namespace printer_aplication_desktop
     	            ],
 	                ""stringQR"": ""20450523381|01|F001|00000006|0|9.00|30/09/2019|6|sdfsdfsdf|""
                 }
-            }";*/
+            }";
 
-            string json = @"{
+            /*string json = @"{
                 ""type"": ""extra"",
-                ""times"": 2,
+                ""times"": 1,
                 ""printer"": {
                     ""type"": ""ethernet"",
                     ""name_system"": ""192.168.1.241"",
@@ -236,7 +236,7 @@ namespace printer_aplication_desktop
                         }
                     ]
                 }
-            }";
+            }";*/
 
             /*string json = @"{
                 ""type"": ""precount"",

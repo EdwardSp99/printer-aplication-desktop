@@ -3,8 +3,11 @@ using ESCPOS_NET.Emitters;
 using ESCPOS_NET.Utilities;
 using printer_aplication_desktop.utils;
 using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Text;
+using System.Text.RegularExpressions;
+using System.Windows.Documents;
 
 namespace printer_aplication_desktop.components
 {
@@ -15,7 +18,7 @@ namespace printer_aplication_desktop.components
         private object printer;
         private object hostname;
         private object port;
-
+        private Dictionary<char, char> characterMap;
 
         public EscPosAdapter(object hostname, object port, ListTypeConexion typeConexion)
         {
@@ -24,6 +27,28 @@ namespace printer_aplication_desktop.components
             this.port = port;
             this.typeConexion = typeConexion;
             Conexion();
+            SpecialCharacterToLetterReplacer();
+        }
+
+        private void SpecialCharacterToLetterReplacer()
+        {
+            characterMap = new Dictionary<char, char>
+            {
+                { 'á', 'a' }, { 'Á', 'A' },
+                { 'é', 'e' }, { 'É', 'E' },
+                { 'í', 'i' }, { 'Í', 'I' },
+                { 'ó', 'o' }, { 'Ó', 'O' },
+                { 'ú', 'u' }, { 'Ú', 'U' },
+                { 'ü', 'u' }, { 'Ü', 'U' },
+                { 'ñ', 'n' }, { 'Ñ', 'N' },
+            };
+        }
+
+        private string ReplaceSpecialCharactersWithLetters(string input)
+        {
+            string replacedString = Regex.Replace(input, "[áéíóúÁÉÍÓÚüÜñÑ]", m => characterMap[m.Value[0]].ToString(), RegexOptions.IgnoreCase);
+
+            return replacedString;
         }
 
         private void Conexion() 
@@ -62,16 +87,19 @@ namespace printer_aplication_desktop.components
             if (printer is SerialPrinter printerSerial)
             {
                 printerSerial.Write(CombinePrinterParameter(dataPrintElement));
+                printerSerial.Dispose();
             }
 
             if (printer is FilePrinter printerFile)
             {
                 printerFile.Write(CombinePrinterParameter(dataPrintElement));
+                printerFile.Dispose();
             }
 
             if (printer is SambaPrinter printerSamba)
             {
                 printerSamba.Write(CombinePrinterParameter(dataPrintElement));
+                printerSamba.Dispose();
             }
         }
 
@@ -88,9 +116,27 @@ namespace printer_aplication_desktop.components
             return builder;
         }
 
+        public byte[] DoubleHeightWeightText()
+        {
+            byte[] elementDouble = CombinePrinterParameter(elementDataPrinter.SetStyles(PrintStyle.DoubleHeight | PrintStyle.DoubleWidth));
+
+            return elementDouble;
+        }
+
         public byte[] PrintDataLine(string textPrinter)
         {
-            byte[] elementText = CombinePrinterParameter(elementDataPrinter.PrintLine(textPrinter));
+            string textReplaced = ReplaceSpecialCharactersWithLetters(textPrinter);
+
+            byte[] elementText = CombinePrinterParameter(elementDataPrinter.PrintLine(textReplaced));
+
+            return elementText;
+        }
+
+        public byte[] PrintData(string textPrinter)
+        {
+            string textReplaced = ReplaceSpecialCharactersWithLetters(textPrinter);
+
+            byte[] elementText = CombinePrinterParameter(elementDataPrinter.Print(textReplaced));
 
             return elementText;
         }
@@ -167,11 +213,40 @@ namespace printer_aplication_desktop.components
             return cutPrinter;
         }
 
-        public byte[] UFT8Encoding(string data) 
+        public string PadBoth(string str, int width, char paddingChar)
         {
-            byte[] utf8Bytes = Encoding.UTF8.GetBytes(data);
+            int totalPadding = width - str.Length;
+            int leftPadding = totalPadding / 2;
+            int rightPadding = totalPadding - leftPadding;
 
-            return utf8Bytes;
+            if (str.Length > width) 
+            {
+                leftPadding = 0;
+                rightPadding = 0;
+            }
+
+            string paddedBoth = new string(paddingChar, leftPadding) + str + new string(paddingChar, rightPadding);
+
+            return paddedBoth;
+        }
+
+        public string PadRightText(string text, int width, char characterPad)
+        {
+            int totalPadding = width - text.Length;
+
+            string paddedLeft = text + new string(characterPad, totalPadding);
+
+            return paddedLeft;
+        }
+
+        public string UFTCharacter(string str)
+        {
+            UTF8Encoding utf8 = new UTF8Encoding();
+      
+            Byte[] encodedBytes = utf8.GetBytes(str);
+            String decodedString = utf8.GetString(encodedBytes);
+
+            return decodedString;
         }
     }
 }

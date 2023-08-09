@@ -74,10 +74,10 @@ namespace printer_aplication_desktop.components
                     case "invoice":
                         result = connectorPrinter.CombinePrinterParameter(
                             result,
-                            //BusinessAdditional(),
-                            //DocumentLegal(),
-                            //Customer(),
-                            //Additional(),
+                            BusinessAdditional(),
+                            DocumentLegal(),
+                            Customer(),
+                            Additional(),
                             Items(),
                             Amounts(),
                             AdditionalFooter(),

@@ -1,0 +1,3 @@
+is_global = true
+build_property.RootNamespace = SerialPortStream-netstandard15
+build_property.ProjectDir = C:\practice\printer-aplication-desktop\packages\SerialPortStream.2.2.0\src\
